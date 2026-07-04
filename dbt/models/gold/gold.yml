@@ -8,6 +8,8 @@ models:
         description: "Stock ticker symbol"
         tests:
           - not_null
+          - accepted_values:
+              values: ['NVDA', 'AAPL', 'MSFT', 'GOOGL', 'META', 'AMZN', 'TSLA', 'AMD', 'PLTR', 'SNOW', 'NET', 'JPM']
       - name: date
         description: "Trading date"
         tests:
@@ -25,6 +27,8 @@ models:
       - name: ticker
         tests:
           - not_null
+          - accepted_values:
+              values: ['NVDA', 'AAPL', 'MSFT', 'GOOGL', 'META', 'AMZN', 'TSLA', 'AMD', 'PLTR', 'SNOW', 'NET', 'JPM']
       - name: date
         tests:
           - not_null
@@ -43,6 +47,8 @@ models:
       - name: ticker
         tests:
           - not_null
+          - accepted_values:
+              values: ['NVDA', 'AAPL', 'MSFT', 'GOOGL', 'META', 'AMZN', 'TSLA', 'AMD', 'PLTR', 'SNOW', 'NET', 'JPM']
       - name: date
         tests:
           - not_null

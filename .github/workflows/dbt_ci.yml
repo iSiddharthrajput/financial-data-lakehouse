@@ -29,6 +29,11 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
+          pip install pytest apache-airflow --constraint "https://raw.githubusercontent.com/apache/airflow/constraints-2.9.3/constraints-3.11.txt"
+
+      - name: 🧪 Run DAG Import Smoke Tests
+        run: |
+          pytest tests/
 
       - name: ⚙️ Setup dbt Profile
         run: |

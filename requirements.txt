@@ -4,29 +4,30 @@
 # ─────────────────────────────────────────────
 
 # ── Data Ingestion ──────────────────────────
-yfinance>=0.2.40          # Stock price data (OHLCV)
-praw>=7.7.0               # Reddit API (WSB sentiment)
-newsapi-python>=0.2.7     # NewsAPI (news sentiment)
+yfinance==0.2.43          # Stock price data (OHLCV)
+praw==7.7.1               # Reddit API (WSB sentiment)
+newsapi-python==0.2.7     # NewsAPI (news sentiment)
 
 # ── Data Transformation ──────────────────────
-dbt-core>=1.9.0           # dbt transformation framework
-dbt-snowflake>=1.9.0      # dbt Snowflake adapter
+dbt-core==1.9.0           # dbt transformation framework
+dbt-snowflake==1.9.0      # dbt Snowflake adapter
 
 # ── Data Quality ─────────────────────────────
-great-expectations>=1.3.0  # Data quality checks
+great-expectations==1.17.0 # Data quality checks (using stable 1.x release)
 
 # ── Dashboard ────────────────────────────────
-streamlit>=1.40.0          # Interactive dashboard
+streamlit==1.40.0          # Interactive dashboard
 
 # ── Data Processing ──────────────────────────
-pandas>=2.2.0              # DataFrames / data manipulation
-numpy>=1.24.0,<2.0.0       # Numerical operations (pinned below 2.0 to avoid PyArrow incompatibilities)
+pandas==2.2.3              # DataFrames / data manipulation (Python 3.11/3.13 compatible)
+numpy==1.26.4              # Pinned to stable 1.x to avoid PyArrow compatibility breaks
 
 # ── Snowflake ────────────────────────────────
-snowflake-connector-python>=3.12.0   # Snowflake Python connector
-snowflake-sqlalchemy>=1.6.0          # SQLAlchemy dialect for Snowflake
+snowflake-connector-python==3.12.2   # Snowflake Python connector
+snowflake-sqlalchemy==1.6.0          # SQLAlchemy dialect for Snowflake
 
 # ── Utilities ────────────────────────────────
-python-dotenv>=1.0.0       # Load .env secrets into environment
-requests>=2.32.0           # HTTP requests
-sqlalchemy>=2.0.0          # SQL toolkit (used by GE + Snowflake)
+python-dotenv==1.0.1       # Load .env secrets into environment
+requests==2.32.3           # HTTP requests
+sqlalchemy==2.0.35          # SQL toolkit (used by GE + Snowflake)
+pytest==9.1.1              # Unit testing framework for Airflow DAGs

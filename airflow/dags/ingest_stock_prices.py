@@ -18,6 +18,7 @@ default_args = {
 # ── 2. Data Extraction & Load Function ─────────────────────────────────────────
 def fetch_and_load_stocks():
     tickers = ['NVDA', 'AAPL', 'MSFT', 'GOOGL', 'META', 'AMZN', 'TSLA', 'AMD', 'PLTR', 'SNOW', 'NET', 'JPM']
+    all_data = []
     failed_tickers = []
     
     print(f"Starting extraction for tickers: {tickers}")

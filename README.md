@@ -9,27 +9,24 @@ A **production-grade Financial Data Lakehouse** built for real-world data engine
 ```
 Data Sources                  Ingestion          Storage & Transform              Serving
 ─────────────                 ─────────          ────────────────────             ───────
-yfinance (Stock Prices)  ──►                ──► Snowflake (Data Warehouse)   ──► Streamlit Dashboard
-Reddit WSB (Sentiment)   ──►  Apache Airflow ──► dbt Core (Bronze→Silver→Gold)
-NewsAPI (News Sentiment) ──►                
+yfinance (Stock Prices)  ──►  Apache Airflow ──► Snowflake (Data Warehouse)   ──► Streamlit Dashboard
+NewsAPI (News Sentiment) ──►  (Orchestrator) ──► dbt Core (Bronze→Silver→Gold)
                                    │
                                Great Expectations (Data Quality)
-                               Elementary (dbt Monitoring)
                                GitHub Actions (CI/CD)
 ```
 
 ## 🛠️ Tech Stack
 
-| Layer | Tool |
-|---|---|
-| Orchestration | Apache Airflow (Docker) |
-| Data Warehouse | Snowflake |
-| Transformations | dbt Core — Medallion Architecture |
-| Data Quality | Great Expectations |
-| Monitoring | Elementary |
-| Dashboard | Streamlit |
-| CI/CD | GitHub Actions |
-| Data Sources | yfinance, Reddit WSB, NewsAPI |
+| Layer | Tool | Status |
+|---|---|---|
+| **Orchestration** | Apache Airflow (Docker) | Active |
+| **Data Warehouse** | Snowflake | Active |
+| **Transformations** | dbt Core — Medallion Architecture | Active |
+| **Data Quality** | Great Expectations | Active |
+| **Dashboard** | Streamlit | Active |
+| **CI/CD** | GitHub Actions | Active |
+| **Data Sources** | yfinance, NewsAPI | Active |
 
 ## 📈 Tracked Tickers
 
@@ -37,17 +34,51 @@ NewsAPI (News Sentiment) ──►
 
 ## 🗂️ Project Phases
 
-- [x] **Phase 1** — Environment Setup (Docker ✅, Python ✅, Snowflake ✅, dbt ✅, Airflow ✅)
-- [/] **Phase 2** — Data Ingestion (yfinance & NewsAPI pipelines ✅, Reddit pending API approval ⏳)
-- [x] **Phase 3** — Medallion Transformations (Bronze → Silver → Gold in dbt ✅)
-- [x] **Phase 4** — Data Quality (Great Expectations ✅, Elementary pending dbt setup)
-- [x] **Phase 5** — Dashboard (Streamlit ✅)
-- [x] **Phase 6** — CI/CD (GitHub Actions ✅)
+- [x] **Phase 1** — Environment Setup (Docker, Snowflake, dbt, Airflow)
+- [x] **Phase 2** — Data Ingestion (yfinance & NewsAPI pipelines)
+- [x] **Phase 3** — Medallion Transformations (Bronze → Silver → Gold in dbt)
+- [x] **Phase 4** — Data Quality (Great Expectations)
+- [x] **Phase 5** — Dashboard (Streamlit)
+- [x] **Phase 6** — CI/CD (GitHub Actions)
+- [x] **Phase 7** — End-to-End Hardening & Testing (Pytest, parameter validation, dbt singular tests, master orchestration)
+
+## 🔮 Future Roadmap & Extensions
+
+- [ ] **Reddit Ingestion**: Add Reddit API scraper (via `praw`) to ingest WallStreetBets sentiment feeds (pending developer API key approval).
+- [ ] **Observability**: Integrate **Elementary** dbt monitoring package to generate data lineage, schema drift anomalies, and test coverage dashboards.
+- [ ] **Container Hardening**: Transition container dependencies from run-time pip installation (`_PIP_ADDITIONAL_REQUIREMENTS`) to pre-baked Custom Docker Images.
 
 ## 🚀 Getting Started
 
-> Setup instructions coming as the project progresses.
+### 1. Prerequisites
+- Docker & Docker Compose
+- Python 3.11+
+- Snowflake Trial/Account
+
+### 2. Local Setup
+1. Clone the repository and configure your `.env` file from the placeholder variables:
+   ```bash
+   cp .env.example .env  # Update variables with your Snowflake & NewsAPI keys
+   ```
+2. Start the Airflow database and services:
+   ```bash
+   docker compose up -d --build
+   ```
+3. Run local unit tests (DAG smoke check):
+   ```bash
+   pip install -r requirements.txt
+   pytest tests/
+   ```
+4. Run dbt locally or from the orchestrator:
+   ```bash
+   cd dbt
+   dbt run --profiles-dir ../airflow/dbt-profile
+   ```
+5. Launch the Streamlit dashboard:
+   ```bash
+   streamlit run dashboard/app.py
+   ```
 
 ---
 
-*Built as a portfolio project demonstrating modern data engineering practices.*
+*Built as a portfolio project demonstrating modern, secure, and production-grade data engineering practices.*
