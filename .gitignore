@@ -40,3 +40,6 @@ README_PERSONAL.md
 *.swp
 .DS_Store
 Thumbs.db
+
+# dbt Telemetry
+airflow/dbt-profile/.user.yml

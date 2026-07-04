@@ -143,7 +143,7 @@ with DAG(
     'validate_gold_data',
     default_args=default_args,
     description='Run Great Expectations data quality checks on Snowflake GOLD tables',
-    schedule_interval='@daily',
+    schedule_interval=None,
     catchup=False,
 ) as dag:
 

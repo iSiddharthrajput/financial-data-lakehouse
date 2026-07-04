@@ -128,7 +128,7 @@ with DAG(
     'ingest_news_sentiment',
     default_args=default_args,
     description='Fetch financial news headlines from NewsAPI and load into Snowflake BRONZE',
-    schedule_interval='@daily',
+    schedule_interval=None,
     catchup=False,
 ) as dag:
 

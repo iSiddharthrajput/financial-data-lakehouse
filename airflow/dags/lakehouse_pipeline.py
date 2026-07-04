@@ -26,7 +26,6 @@ with DAG(
         trigger_dag_id='ingest_stock_prices',
         wait_for_completion=True,
         poke_interval=15,
-        deferrable=True,  # Saves worker slot resources by deferring task wait checks
     )
 
     trigger_news = TriggerDagRunOperator(
@@ -34,7 +33,6 @@ with DAG(
         trigger_dag_id='ingest_news_sentiment',
         wait_for_completion=True,
         poke_interval=15,
-        deferrable=True,
     )
 
     # ── 3. dbt Transformation & Testing (Sequential) ───────────────────────────
@@ -56,7 +54,6 @@ with DAG(
         trigger_dag_id='validate_gold_data',
         wait_for_completion=True,
         poke_interval=15,
-        deferrable=True,
     )
 
     # Chaining the tasks: Ingestion -> Transform -> dbt Test -> Great Expectations

@@ -93,7 +93,7 @@ with DAG(
     'ingest_stock_prices',
     default_args=default_args,
     description='Fetch daily stock prices from yfinance and load into Snowflake BRONZE',
-    schedule_interval='@daily',
+    schedule_interval=None,
     catchup=False,
 ) as dag:
 
