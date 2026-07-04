@@ -1,0 +1,54 @@
+version: 2
+
+models:
+  - name: gold_daily_stock_summary
+    description: "One row per ticker per day — prices, computed metrics, and news article count. Primary dashboard table."
+    columns:
+      - name: ticker
+        description: "Stock ticker symbol"
+        tests:
+          - not_null
+      - name: date
+        description: "Trading date"
+        tests:
+          - not_null
+      - name: close
+        description: "Closing price"
+        tests:
+          - not_null
+      - name: news_article_count
+        description: "Number of news articles published for this ticker on this date"
+
+  - name: gold_ticker_performance
+    description: "Rolling 7-day and 30-day window metrics per ticker for comparative performance analysis"
+    columns:
+      - name: ticker
+        tests:
+          - not_null
+      - name: date
+        tests:
+          - not_null
+      - name: avg_close_7d
+        description: "7-day rolling average closing price"
+      - name: avg_close_30d
+        description: "30-day rolling average closing price"
+      - name: total_volume_7d
+        description: "7-day rolling total trading volume"
+      - name: avg_daily_return_7d
+        description: "7-day rolling average daily return percentage"
+
+  - name: gold_news_volume
+    description: "Daily news article count per ticker — media attention trends for correlation analysis"
+    columns:
+      - name: ticker
+        tests:
+          - not_null
+      - name: date
+        tests:
+          - not_null
+      - name: article_count
+        description: "Number of articles published for this ticker on this date"
+        tests:
+          - not_null
+      - name: sources
+        description: "Comma-separated list of news sources that covered this ticker"

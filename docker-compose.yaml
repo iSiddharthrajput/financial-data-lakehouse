@@ -1,0 +1,106 @@
+version: '3.8'
+
+x-airflow-common: &airflow-common
+  image: apache/airflow:2.9.3-python3.11
+  environment:
+    &airflow-common-env
+    AIRFLOW__CORE__EXECUTOR: LocalExecutor
+    AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres/${POSTGRES_DB}
+    # Loaded from local .env file (gitignored)
+    AIRFLOW__CORE__FERNET_KEY: ${AIRFLOW_FERNET_KEY}
+    AIRFLOW__CORE__LOAD_EXAMPLES: 'false'
+    AIRFLOW__CORE__LOGGING_LEVEL: INFO
+    # Inject Snowflake connection credentials for dbt compile and Airflow tasks
+    SNOWFLAKE_ACCOUNT: ${SNOWFLAKE_ACCOUNT}
+    SNOWFLAKE_USER: ${SNOWFLAKE_USER}
+    SNOWFLAKE_PASSWORD: ${SNOWFLAKE_PASSWORD}
+    SNOWFLAKE_ROLE: ${SNOWFLAKE_ROLE}
+    SNOWFLAKE_WAREHOUSE: ${SNOWFLAKE_WAREHOUSE}
+    SNOWFLAKE_DATABASE: ${SNOWFLAKE_DATABASE}
+    SNOWFLAKE_SCHEMA: ${SNOWFLAKE_SCHEMA}
+    # Automatically install Python requirements inside the container at startup
+    _PIP_ADDITIONAL_REQUIREMENTS: >-
+      yfinance>=0.2.40
+      praw>=7.7.0
+      newsapi-python>=0.2.7
+      dbt-core>=1.9.0
+      dbt-snowflake>=1.9.0
+      great-expectations>=1.3.0
+      pandas>=2.2.0
+      numpy>=1.24.0,<2.0.0
+      python-dotenv>=1.0.0
+      requests>=2.32.0
+    NEWSAPI_KEY: ${NEWSAPI_KEY}
+
+  volumes:
+    - ./airflow/dags:/opt/airflow/dags
+    - ./airflow/logs:/opt/airflow/logs
+    - ./airflow/plugins:/opt/airflow/plugins
+    - ./dbt:/opt/airflow/dbt                               # Mount the dbt project folder
+    - ./airflow/dbt-profile:/opt/airflow/.dbt:ro            # Mount local read-only dbt profiles
+  user: "${AIRFLOW_UID:-50000}:0"
+  depends_on:
+    postgres:
+      condition: service_healthy
+
+services:
+  postgres:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-airflow}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB:-airflow}
+    volumes:
+      - postgres-db-volume:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-airflow}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: always
+
+  airflow-webserver:
+    <<: *airflow-common
+    command: webserver
+    ports:
+      - "8080:8080"
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    restart: always
+
+  airflow-scheduler:
+    <<: *airflow-common
+    command: scheduler
+    restart: always
+
+  airflow-init:
+    <<: *airflow-common
+    environment:
+      <<: *airflow-common-env
+      _PIP_ADDITIONAL_REQUIREMENTS: '' # Skip installing heavy packages for the init container to speed up DB setup
+    user: "0:0"
+    entrypoint: "/bin/bash"
+    # Create the db schema, set folder permissions, and create the default admin user using env vars
+    command:
+      - -c
+      - |
+        mkdir -p /opt/airflow/logs /opt/airflow/dags /opt/airflow/plugins
+        chown -R 50000:0 /opt/airflow/logs /opt/airflow/dags /opt/airflow/plugins
+        exec /entrypoint airflow db migrate && \
+        airflow users create \
+          --username admin \
+          --firstname Siddharth \
+          --lastname Rajput \
+          --role Admin \
+          --email admin@example.com \
+          --password "${AIRFLOW_ADMIN_PASSWORD}"
+    volumes:
+      - ./airflow/logs:/opt/airflow/logs
+      - ./airflow/dags:/opt/airflow/dags
+      - ./airflow/plugins:/opt/airflow/plugins
+
+volumes:
+  postgres-db-volume:

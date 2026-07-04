@@ -1,0 +1,45 @@
+version: 2
+
+sources:
+  - name: bronze
+    description: "Raw ingested data in the BRONZE schema — untransformed, directly from source APIs"
+    database: FINANCIAL_DB
+    schema: BRONZE
+    tables:
+      - name: RAW_STOCK_PRICES
+        description: "Daily OHLCV stock price data from yfinance (12 tickers, 30-day backfill)"
+        columns:
+          - name: TICKER
+            description: "Stock ticker symbol (e.g., NVDA, AAPL)"
+          - name: DATE
+            description: "Trading date"
+          - name: OPEN
+            description: "Opening price"
+          - name: HIGH
+            description: "Highest price during the day"
+          - name: LOW
+            description: "Lowest price during the day"
+          - name: CLOSE
+            description: "Closing price"
+          - name: VOLUME
+            description: "Number of shares traded"
+          - name: INGESTED_AT
+            description: "UTC timestamp when the row was loaded by Airflow"
+
+      - name: RAW_NEWS_ARTICLES
+        description: "Financial news headlines from NewsAPI (top 20 articles per ticker per day)"
+        columns:
+          - name: TICKER
+            description: "Stock ticker the article relates to"
+          - name: SOURCE
+            description: "News publisher name"
+          - name: TITLE
+            description: "Article headline"
+          - name: DESCRIPTION
+            description: "Article summary/snippet"
+          - name: URL
+            description: "Link to the full article"
+          - name: PUBLISHED_AT
+            description: "When the article was published"
+          - name: INGESTED_AT
+            description: "UTC timestamp when the row was loaded by Airflow"

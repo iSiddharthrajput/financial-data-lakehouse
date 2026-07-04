@@ -1,0 +1,42 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+dist/
+build/
+*.egg
+.venv/
+venv/
+env/
+
+# Environment variables / secrets
+.env
+*.env
+secrets/
+
+# dbt
+dbt/target/
+dbt/dbt_packages/
+dbt/logs/
+logs/
+
+# Great Expectations
+great_expectations/uncommitted/
+
+# Airflow
+airflow/logs/
+airflow/plugins/__pycache__/
+
+# Streamlit
+.streamlit/secrets.toml
+
+# Private journal — DO NOT push to GitHub
+README_PERSONAL.md
+
+# IDE
+.vscode/
+.idea/
+*.swp
+.DS_Store
+Thumbs.db

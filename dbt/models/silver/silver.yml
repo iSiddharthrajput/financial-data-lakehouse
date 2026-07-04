@@ -1,0 +1,40 @@
+version: 2
+
+models:
+  - name: silver_stock_prices
+    description: "Cleaned and deduplicated daily stock prices with computed metrics"
+    columns:
+      - name: ticker
+        description: "Stock ticker symbol"
+        tests:
+          - not_null
+      - name: date
+        description: "Trading date"
+        tests:
+          - not_null
+      - name: close
+        description: "Closing price"
+        tests:
+          - not_null
+      - name: daily_return_pct
+        description: "Percentage change from open to close"
+      - name: price_range
+        description: "Intraday high minus low (volatility indicator)"
+
+  - name: silver_news_articles
+    description: "Cleaned and deduplicated news articles with extracted published_date"
+    columns:
+      - name: ticker
+        description: "Stock ticker the article relates to"
+        tests:
+          - not_null
+      - name: title
+        description: "Article headline (trimmed, non-null)"
+        tests:
+          - not_null
+      - name: url
+        description: "Link to the full article"
+        tests:
+          - not_null
+      - name: published_date
+        description: "Date the article was published (extracted from published_at)"
