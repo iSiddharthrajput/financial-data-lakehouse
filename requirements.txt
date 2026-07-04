@@ -24,7 +24,7 @@ numpy==1.26.4              # Pinned to stable 1.x to avoid PyArrow compatibility
 
 # ── Snowflake ────────────────────────────────
 snowflake-connector-python==3.12.2   # Snowflake Python connector
-snowflake-sqlalchemy==1.6.0          # SQLAlchemy dialect for Snowflake
+snowflake-sqlalchemy==1.10.2          # SQLAlchemy dialect for Snowflake
 
 # ── Utilities ────────────────────────────────
 python-dotenv==1.0.1       # Load .env secrets into environment
