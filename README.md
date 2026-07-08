@@ -294,7 +294,6 @@ Being direct about where this stands today:
 - **Runtime dependency installation.** The Airflow image installs Python packages at container startup via `_PIP_ADDITIONAL_REQUIREMENTS`, which slows down `docker compose up`. A pre-baked custom image would be faster and more reproducible.
 - **Single-node orchestration.** Airflow runs with `LocalExecutor` against a single Postgres instance — appropriate for a project at this scale, not horizontally scaled.
 - **30-day rolling window only.** Price history is a 30-day backfill on each run rather than an accumulating historical archive, so there's no long-range trend analysis yet.
-- **No LICENSE file yet.**
 
 ## Skills Demonstrated
 
