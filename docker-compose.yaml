@@ -92,7 +92,7 @@ services:
       - |
         mkdir -p /opt/airflow/logs /opt/airflow/dags /opt/airflow/plugins
         chown -R 50000:0 /opt/airflow/logs /opt/airflow/dags /opt/airflow/plugins
-        exec /entrypoint airflow db migrate && \
+        /entrypoint airflow db migrate && \
         airflow users create \
           --username admin \
           --firstname Siddharth \
