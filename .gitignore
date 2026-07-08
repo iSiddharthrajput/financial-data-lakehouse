@@ -46,3 +46,7 @@ airflow/dbt-profile/.user.yml
 
 # Project Journey Documentation
 MoM.md
+
+# Local venvs
+dbt-env/
+dbt-envv/
